@@ -28,9 +28,6 @@ Route::prefix('links')->group(function () {
 Route::prefix('link-visit-logs')->group(function () {
     Route::get('/', [LinkVisitLogsController::class, 'index'])->name('api.v1.link-visit-logs.index');
     Route::get('/{id}', [LinkVisitLogsController::class, 'show'])->name('api.v1.link-visit-logs.show');
-    Route::post('/', [LinkVisitLogsController::class, 'store'])->name('api.v1.link-visit-logs.store');
-    Route::put('/{id}', [LinkVisitLogsController::class, 'update'])->name('api.v1.link-visit-logs.update');
-    Route::delete('/{id}', [LinkVisitLogsController::class, 'destroy'])->name('api.v1.link-visit-logs.destroy');
 });
 
 Route::fallback(function () {
