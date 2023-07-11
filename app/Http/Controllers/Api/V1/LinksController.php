@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Models\Links;
+use App\Models\LinkVisitLogs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Stevebauman\Location\Facades\Location;
@@ -17,9 +18,21 @@ class LinksController extends Controller
     public function index(Request $request)
     {
         try {
-            return response()->json([
-                'message' => 'Hello World'
-            ], 200);
+            // TODO: parameter
+            $perPage = $request->get('per_page', 10) ?? $this->perPage;
+
+            $items = Links::query()->select([
+                'links.id',
+                'links.url',
+                'links.short_url',
+                DB::raw('COUNT(link_visit_logs.id) as visit_count'),
+            ])->leftJoin('link_visit_logs', 'link_visit_logs.link_id', '=', 'links.id')
+                ->groupBy('links.id')
+                ->orderBy('links.id', 'desc');
+
+            $items = $items->paginate($perPage);
+
+            return response()->json($items, 200);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
         }
@@ -28,10 +41,34 @@ class LinksController extends Controller
     public function show(string $id)
     {
         try {
+            $item = Links::query()->select([
+                'links.id',
+                'links.url',
+                'links.short_url',
+                'links.created_at',
+                'links.updated_at',
+                DB::raw('COUNT(link_visit_logs.id) as visit_count'),  
+            ])->leftJoin('link_visit_logs', 'link_visit_logs.link_id', '=', 'links.id')
+                ->groupBy('links.id')
+                ->findOrFail($id);
 
-            return response()->json([
-                'message' => 'Hello World'
-            ], 200);
+            return response()->json($item, 200);
+        } catch (\Exception $e) {
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    public function open(string $shortUrl)
+    {
+        try {
+            $link = Links::where('short_url', $shortUrl)->firstOrFail();
+
+            LinkVisitLogs::create([
+                'link_id' => $link->id,
+                'ip' => request()->ip(),
+            ]);
+
+            return redirect($link->url);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
         }
@@ -55,7 +92,6 @@ class LinksController extends Controller
                 'user_id' => $user ? $user->id : null,
             ]);
 
-
             return response()->json($link, 200);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
@@ -65,10 +101,20 @@ class LinksController extends Controller
     public function update(Request $request, string $id)
     {
         try {
+            // TODO: only members can update their own links
+            // 
 
-            return response()->json([
-                'message' => 'Hello World'
-            ], 200);
+            $request->validate([
+                'url' => 'required|url',
+            ]);
+
+            $link = Links::findOrFail($id);
+
+            $link->update([
+                'url' => $request->url,
+            ]);
+
+            return response()->json($link, 200);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
         }
@@ -77,9 +123,15 @@ class LinksController extends Controller
     public function destroy(string $id)
     {
         try {
+            // TODO: only members can delete their own links
+            // 
+
+            $link = Links::findOrFail($id);
+
+            $link->delete();
 
             return response()->json([
-                'message' => 'Hello World'
+                'message' => 'Link deleted successfully'
             ], 200);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
@@ -89,7 +141,7 @@ class LinksController extends Controller
     private function shortenUrl()
     {
         $characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        $length = 6;
+        $length = 8;
         $shortUrl = '';
 
         // Generate a random string with specified length

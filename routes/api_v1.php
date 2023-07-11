@@ -18,6 +18,7 @@ Route::get('/', function () {
 
 Route::prefix('links')->group(function () {
     Route::get('/', [LinksController::class, 'index'])->name('api.v1.links.index');
+    Route::get("/open/{shortUrl}", [LinksController::class, 'open'])->name('api.v1.links.open');
     Route::get('/{id}', [LinksController::class, 'show'])->name('api.v1.links.show');
     Route::post('/', [LinksController::class, 'store'])->name('api.v1.links.store');
     Route::put('/{id}', [LinksController::class, 'update'])->name('api.v1.links.update');

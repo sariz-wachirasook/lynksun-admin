@@ -10,8 +10,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
-    public function __construct()
-    {
+    public function __construct(
+        public $perPage = 10
+    ) {
     }
 
     public function exceptionResponse(\Exception $e)
