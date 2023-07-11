@@ -11,12 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('links', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId("user_id")->nullable()->constrained("users")->onDelete("cascade");
-            $table->text("url");
-            $table->text("short_url");
-            $table->timestamps();
+        Schema::table('links', function (Blueprint $table) {
+            $table->timestamp('expires_at')->nullable()->after('short_url');
         });
     }
 
@@ -25,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('links');
+        Schema::table('links', function (Blueprint $table) {
+            $table->dropColumn('expires_at');
+        });
     }
 };
