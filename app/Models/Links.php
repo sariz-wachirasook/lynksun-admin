@@ -9,6 +9,13 @@ class Links extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'url',
+        'short_url',
+        'expires_at',
+        'user_id',
+    ];
+
     public function visitLogs()
     {
         return $this->hasMany(LinkVisitLogs::class);
