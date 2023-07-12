@@ -34,8 +34,16 @@ class Controller extends BaseController
     ) {
     }
 
-    public function exceptionResponse(\Exception $e)
+    public function exceptionResponse($e)
     {
+        if (isset($e->status)) {
+            if ($e->status == 422) {
+                return response()->json([
+                    'message' => $e->getMessage(),
+                ], $e->status);
+            }
+        }
+
         return response()->json([
             'message' => "Internal Server Error"
         ], 500);

@@ -197,7 +197,7 @@ class LinksController extends Controller
     public function open(string $shortUrl)
     {
         try {
-            $link = Links::where('short_url', $shortUrl)->firstOrFail();
+            $link = Links::where('short_url', $shortUrl)->first();
 
             // if not found, return 404
             if (!$link) {
