@@ -8,7 +8,6 @@ export default defineConfig({
                 "resources/css/tailwind.css",
                 "resources/css/app.css",
                 "resources/js/app.js",
-                "resources/js/swagger.js",
                 "node_modules/@fortawesome/fontawesome-free/css/fontawesome.css",
                 "node_modules/@fortawesome/fontawesome-free/css/solid.css",
             ],
