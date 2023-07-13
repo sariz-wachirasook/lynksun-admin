@@ -12,6 +12,7 @@ class Links extends Model
     protected $fillable = [
         'url',
         'short_url',
+        'name',
         'expires_at',
         'user_id',
     ];

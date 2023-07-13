@@ -59,15 +59,24 @@ class LinksController extends Controller
         try {
             // TODO: parameter
             $perPage = $request->get('per_page', 10) ?? $this->perPage;
+            $search = $request->get('search', null);
 
             $items = Links::query()->select([
                 'links.id',
                 'links.url',
+                'links.name',
                 'links.short_url',
                 DB::raw('COUNT(link_visit_logs.id) as visit_count'),
             ])->leftJoin('link_visit_logs', 'link_visit_logs.link_id', '=', 'links.id')
                 ->groupBy('links.id')
                 ->orderBy('links.id', 'desc');
+
+            if ($search) {
+                $items = $items
+                    ->orWhere('links.url', 'like', '%' . $search . '%')
+                    ->orWhere('links.name', 'like', '%' . $search . '%')
+                    ->orWhere('links.short_url', 'like', '%' . $search . '%');
+            }
 
             $items = $items->paginate($perPage);
 
@@ -132,6 +141,7 @@ class LinksController extends Controller
         try {
             $item = Links::query()->select([
                 'links.id',
+                'links.name',
                 'links.url',
                 'links.short_url',
                 'links.created_at',
@@ -151,15 +161,20 @@ class LinksController extends Controller
     public function visits(string $id)
     {
         try {
-            $visits = LinkVisitLogs::query()
-                ->select([
-                    DB::raw('DATE(created_at) as date'),
-                    DB::raw('COUNT(id) as total'),
-                ])
-                ->where('link_id', $id)
-                ->where('created_at', '>=', Carbon::now()->subDays(30))
-                ->groupBy('date')
-                ->get();
+            $visits = [];
+
+            // for 30 days check each
+            for ($i = 0; $i <= 7; $i++) {
+                $date = Carbon::now()->subDays(7 - $i)->format('Y-m-d');
+
+                $visits[$i] = LinkVisitLogs::query()->select([
+                    DB::raw('COUNT(link_visit_logs.id) as count'),
+                ])->where('link_id', $id)
+                    ->whereDate('created_at', $date)
+                    ->first();
+
+                $visits[$i]['date'] = $date;
+            }
 
             return response()->json($visits, 200);
         } catch (\Exception $e) {
