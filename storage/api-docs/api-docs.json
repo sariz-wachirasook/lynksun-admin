@@ -460,6 +460,70 @@
                 ]
             }
         },
+        "/api/v1/links/{id}/visits": {
+            "get": {
+                "tags": [
+                    "Links"
+                ],
+                "summary": "Get Summary of link visits",
+                "description": "Get Summary of link visits",
+                "operationId": "getLinkVisits",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Link ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not Found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal Server Error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearer": []
+                    }
+                ]
+            }
+        },
         "/api/v1/links/open/{shortUrl}": {
             "get": {
                 "tags": [

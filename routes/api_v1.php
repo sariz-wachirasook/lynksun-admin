@@ -11,10 +11,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/', function () {
-    return [
-        'name' => 'Lynksun API',
-        'version' => '1.0.0',
-    ];
+    return redirect()->route('l5-swagger.default.api');
+});
+
+
+Route::prefix("auth")->group(function () {
+    Route::post('/login', [UserAuthenticationController::class, 'login'])->name('api.v1.auth.login');
+    Route::post('/register', [UserAuthenticationController::class, 'register'])->name('api.v1.auth.register');
 });
 
 Route::prefix('links')->group(function () {

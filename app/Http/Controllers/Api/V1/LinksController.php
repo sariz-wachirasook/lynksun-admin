@@ -57,7 +57,8 @@ class LinksController extends Controller
     public function index(Request $request)
     {
         try {
-            // TODO: parameter
+            $user = $request->user();
+
             $perPage = $request->get('per_page', 10) ?? $this->perPage;
             $search = $request->get('search', null);
 
@@ -76,6 +77,10 @@ class LinksController extends Controller
                     ->orWhere('links.url', 'like', '%' . $search . '%')
                     ->orWhere('links.name', 'like', '%' . $search . '%')
                     ->orWhere('links.short_url', 'like', '%' . $search . '%');
+            }
+
+            if ($user) {
+                $items = $items->where('links.user_id', $user->id);
             }
 
             $items = $items->paginate($perPage);
@@ -139,6 +144,8 @@ class LinksController extends Controller
     public function show(string $id)
     {
         try {
+            $user = request()->user();
+
             $item = Links::query()->select([
                 'links.id',
                 'links.name',
@@ -146,10 +153,23 @@ class LinksController extends Controller
                 'links.short_url',
                 'links.created_at',
                 'links.updated_at',
+                'links.user_id',
                 DB::raw('COUNT(link_visit_logs.id) as visit_count'),
             ])->leftJoin('link_visit_logs', 'link_visit_logs.link_id', '=', 'links.id')
                 ->groupBy('links.id')
                 ->find($id);
+
+            if ($user && $item && $item->user_id !== $user->id) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
+
+            if ($user === null && $item->user_id !== null) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
+
+            if (!$item) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
 
             return response()->json($item, 200);
         } catch (\Exception $e) {
@@ -157,7 +177,56 @@ class LinksController extends Controller
         }
     }
 
-
+    /**
+     * @OA\Get(
+     *      path="/api/v1/links/{id}/visits",
+     *      operationId="getLinkVisits",
+     *      tags={"Links"},
+     *      summary="Get Summary of link visits",
+     *      description="Get Summary of link visits",
+     *      security={
+     *         {"bearer": {}}
+     *      },
+     *      @OA\Parameter(
+     *          name="id",
+     *          description="Link ID",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="integer",
+     *              default=1
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       ),
+     *       @OA\Response(
+     *          response=404,
+     *          description="Not Found",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example="Not Found"
+     *              )
+     *          )
+     *       ),
+     *       @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example="Internal Server Error"
+     *              )
+     *          )
+     *       )
+     *     )
+     */
     public function visits(string $id)
     {
         try {

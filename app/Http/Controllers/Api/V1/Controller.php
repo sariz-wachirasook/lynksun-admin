@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
+use Illuminate\Http\Response;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -40,12 +41,12 @@ class Controller extends BaseController
             if ($e->status == 422) {
                 return response()->json([
                     'message' => $e->getMessage(),
-                ], $e->status);
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
         }
 
         return response()->json([
             'message' => "Internal Server Error"
-        ], 500);
+        ], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 }
