@@ -45,7 +45,7 @@ class LinkVisitLogsController extends Controller
      *              )
      *          )
      *       )
-     *     )
+     *    )
      */
     public function index(Request $request)
     {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\V1\UserAuthenticationController;
 use App\Http\Controllers\Api\V1\LinksController;
 use App\Http\Controllers\Api\V1\LinkVisitLogsController;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ Route::get('/', function () {
 
 Route::prefix('links')->group(function () {
     Route::get('/', [LinksController::class, 'index'])->name('api.v1.links.index');
-    Route::get("/open/{shortUrl}", [LinksController::class, 'open'])->name('api.v1.links.open');
+    Route::get('/open/{shortUrl}', [LinksController::class, 'open'])->name('api.v1.links.open');
+    Route::get('/{id}/visits', [LinksController::class, 'visits'])->name('api.v1.links.visits');
     Route::get('/{id}', [LinksController::class, 'show'])->name('api.v1.links.show');
     Route::post('/', [LinksController::class, 'store'])->name('api.v1.links.store');
     Route::put('/{id}', [LinksController::class, 'update'])->name('api.v1.links.update');

@@ -147,6 +147,26 @@ class LinksController extends Controller
         }
     }
 
+
+    public function visits(string $id)
+    {
+        try {
+            $visits = LinkVisitLogs::query()
+                ->select([
+                    DB::raw('DATE(created_at) as date'),
+                    DB::raw('COUNT(id) as total'),
+                ])
+                ->where('link_id', $id)
+                ->where('created_at', '>=', Carbon::now()->subDays(30))
+                ->groupBy('date')
+                ->get();
+
+            return response()->json($visits, 200);
+        } catch (\Exception $e) {
+            return $this->exceptionResponse($e);
+        }
+    }
+
     /**
      * @OA\Get(
      *      path="/api/v1/links/open/{shortUrl}",
@@ -286,6 +306,7 @@ class LinksController extends Controller
             $link = Links::create([
                 'url' => $request->url,
                 'short_url' => $shortUrl,
+                'name' => $request->name ?? null,
                 'expires_at' => $user ? null : $expiresAt,
                 'user_id' => $user ? $user->id : null,
             ]);
@@ -389,6 +410,12 @@ class LinksController extends Controller
             $link->update([
                 'url' => $request->url,
             ]);
+
+            if ($request->name) {
+                $link->update([
+                    'name' => $request->name,
+                ]);
+            }
 
             return response()->json($link, 200);
         } catch (\Exception $e) {
