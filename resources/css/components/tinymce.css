@@ -1,0 +1,16 @@
+.tinymce {
+    @apply w-full bg-gray-100 min-h-[400px] border-none rounded-lg block;
+    @apply dark:bg-gray-700 opacity-0;
+}
+
+.tinymce[style="display: none;"] {
+    @apply !block absolute left-0 top-0 opacity-0;
+}
+
+.tox-tinymce {
+    @apply opacity-0;
+}
+
+.wysiwyg {
+    @apply text-gray-700 dark:text-gray-300;
+}

@@ -1,30 +1,5 @@
 @php
-    $menu = [
-        [
-            'name' => __('routes.home'),
-            'route' => 'home',
-        ],
-        [
-            'name' => __('routes.technology'),
-            'route' => 'technologies.index',
-            'icon' => '<i class="fa-solid fa-code mr-1"></i>',
-        ],
-        [
-            'name' => __('routes.cms'),
-            'route' => 'posts.index',
-            'icon' => '<i class="fa-solid fa-newspaper mr-1"></i>',
-        ],
-        [
-            'name' => __('routes.gallery'),
-            'route' => 'galleries.index',
-            'icon' => '<i class="fa-solid fa-image mr-1"></i>',
-        ],
-        [
-            'name' => __('routes.api'),
-            'route' => 'swagger',
-            'icon' => '<i class="fa-solid fa-code mr-1"></i>',
-        ],
-    ];
+    $menu = [];
 @endphp
 
 
@@ -35,7 +10,8 @@
             <a href="{{ route('home', session('locale')) }}" class="grid grid-cols-[auto,1fr,auto]">
                 <x-image src="https://laravel.com/img/logomark.min.svg" class="h-8 mr-3" alt="Laravel Logo"
                     :lazy="false" />
-                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Laravel Starter By Sariz
+                <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Laravel Starter By
+                    Sariz
                     Wachirasook
                 </span>
             </a>

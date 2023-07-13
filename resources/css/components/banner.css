@@ -1,0 +1,7 @@
+.facebook-banner {
+    @apply w-full pt-[52.5%] relative rounded-lg overflow-hidden;
+
+    &__image {
+        @apply absolute inset-0 w-full h-full object-cover;
+    }
+}
