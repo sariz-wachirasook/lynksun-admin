@@ -23,4 +23,9 @@ return [
     'original_url' => 'Original URL',
     'name' => 'Name',
     'total_visits' => 'Total visits',
+    'total_link_opened' => 'Total link opened',
+    'total_links' => 'Total links',
+    'total_users' => 'Total users',
+    'today_new_links' => 'Today new links',
+
 ];

@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\App;
 
 Route::get('/dashboard', DashboardController::class)->name('admin.dashboard')->middleware('admin.auth');
-
+Route::get('/dashboard/chart', [DashboardController::class, 'getChartData'])->name('admin.dashboard.chart')->middleware('admin.auth');
 Route::get('/login', [AdminAuthenticationController::class, 'index'])->name('admin.login');
 Route::post('/login', [AdminAuthenticationController::class, 'login'])->name('admin.login');
-
+Route::get('/logout', [AdminAuthenticationController::class, 'logout'])->name('admin.logout');
 
 Route::resource('links', LinksController::class)->middleware('admin.auth')->names([
     'index' => 'admin.links.index',
@@ -33,3 +33,12 @@ Route::resource('users', UsersController::class)->middleware('admin.auth')->name
     'update' => 'admin.users.update',
     'destroy' => 'admin.users.destroy',
 ])->parameter('users', 'id');
+
+Route::get('/', function () {
+    return redirect()->route('admin.dashboard');
+});
+
+// fallback route
+Route::fallback(function () {
+    return redirect()->route('admin.dashboard');
+});

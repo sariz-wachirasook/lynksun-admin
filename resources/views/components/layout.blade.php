@@ -45,7 +45,7 @@
 
 <body class="dark:bg-gray-900 antialiased">
     <x-layouts.header />
-    <div class="grid md:grid-cols-[auto,1fr]">
+    <div class="grid  @if (auth()->guard('admin')->user()) md:grid-cols-[auto,1fr] @endif">
         <x-layouts.aside />
 
         <main class="min-h-[75vh]">

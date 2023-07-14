@@ -7,6 +7,12 @@
             'order' => false,
         ],
         [
+            'title' => __('app.name'),
+            'key' => 'name',
+            'type' => 'text',
+            'order' => false,
+        ],
+        [
             'title' => __('app.short_url'),
             'key' => 'short_url',
             'type' => 'short_url',
