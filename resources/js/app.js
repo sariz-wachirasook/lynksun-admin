@@ -1,11 +1,12 @@
 import "flowbite";
 
 import tinymce from "./components/tinymce";
-import mobileResize from "./utils/mobileResize";
-import darkModeSwitcher from "./utils/darkModeSwitcher";
+import mobileResize from "./components/utils/mobileResize";
+import darkModeSwitcher from "./components/utils/darkModeSwitcher";
 import modal from "./components/modal";
 import imageUpload from "./components/imageUpload";
-import lazy from "./utils/lazy";
+import lazy from "./components/utils/lazy";
+import barChart from "./components/barChart";
 
 $(() => {
     tinymce.init();
@@ -14,4 +15,5 @@ $(() => {
     imageUpload.init();
     modal.initDeleteModal();
     lazy.init();
+    barChart.init();
 });
