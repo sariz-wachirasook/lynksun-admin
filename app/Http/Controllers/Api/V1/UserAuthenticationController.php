@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 
 class UserAuthenticationController extends Controller
 {
+
+
     public function login(Request $request)
     {
         $user = User::where('email', $request->email)->first();
@@ -56,12 +58,54 @@ class UserAuthenticationController extends Controller
         ], Response::HTTP_CREATED);
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/v1/users/login",
+     *     tags={"Users"},
+     *     summary="Login",
+     *     description="Login",
+     *     operationId="login",
+     *     @OA\RequestBody(
+     *         description="Login",
+     *         required=true,
+     *         @OA\JsonContent(ref="#/components/schemas/LoginRequest")
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/LoginResponse")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *     )
+     * )
+     */
     public function me(Request $request)
     {
         $user = $request->user();
         return response()->json($user, Response::HTTP_OK);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/users/me",
+     *     tags={"Users"},
+     *     summary="Get the authenticated User",
+     *     description="Get the authenticated User",
+     *     operationId="me",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *     )
+     * )
+     */
     public function update(Request $request)
     {
         $user = $request->user();
@@ -77,6 +121,25 @@ class UserAuthenticationController extends Controller
         return response()->json($user, Response::HTTP_OK);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/users/me",
+     *     tags={"Users"},
+     *     summary="Get the authenticated User",
+     *     description="Get the authenticated User",
+     *     operationId="me",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *     )
+     * )
+     */
     public function updatePassword(Request $request)
     {
         $user = $request->user();
@@ -110,6 +173,25 @@ class UserAuthenticationController extends Controller
         return response()->json($user, Response::HTTP_OK);
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/users/me",
+     *     tags={"Users"},
+     *     summary="Get the authenticated User",
+     *     description="Get the authenticated User",
+     *     operationId="me",
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *         @OA\JsonContent(ref="#/components/schemas/User")
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthenticated",
+     *     )
+     * )
+     */
     public function delete(Request $request)
     {
         $user = $request->user();

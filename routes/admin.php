@@ -4,9 +4,7 @@ use App\Http\Controllers\Admin\AdminAuthenticationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\LinksController;
 use App\Http\Controllers\Admin\UsersController;
-use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\App;
 
 Route::get('/dashboard', DashboardController::class)->name('admin.dashboard')->middleware('admin.auth');
 Route::get('/dashboard/chart', [DashboardController::class, 'getChartData'])->name('admin.dashboard.chart')->middleware('admin.auth');

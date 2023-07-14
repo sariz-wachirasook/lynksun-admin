@@ -49,6 +49,6 @@
     </x-page-header>
 
     {{-- table --}}
-    <x-table :columns="$columns" :sort="$sort" :order="$order" :items="$items" route="admin.links"
+    <x-table :columns="$columns" :sort="$sort" :order="$order" :items="$items" route="admin.users"
         :search="$search" :per_page="$per_page" />
 </x-layout>

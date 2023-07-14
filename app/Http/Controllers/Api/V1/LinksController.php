@@ -593,6 +593,61 @@ class LinksController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *      path="/api/v1/links/{slug}",
+     *      operationId="showLinkBySlug",
+     *      tags={"Links"},
+     *      summary="Get link by slug",
+     *      description="Returns link data",
+     *      @OA\Parameter(
+     *          name="slug",
+     *          description="Link slug",
+     *          required=true,
+     *          in="path",
+     *          @OA\Schema(
+     *              type="string",
+     *              default="1"
+     *          )
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="url",
+     *                  type="string",
+     *                  example="https://www.google.com"
+     *              )
+     *          )
+     *       ),
+     *       @OA\Response(
+     *          response=404,
+     *          description="Not Found",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example="Not Found"
+     *              )
+     *          )
+     *       ),
+     *       @OA\Response(
+     *          response=500,
+     *          description="Internal Server Error",
+     *          @OA\JsonContent(
+     *              type="object",
+     *              @OA\Property(
+     *                  property="message",
+     *                  type="string",
+     *                  example="Internal Server Error"
+     *              )
+     *          )
+     *       )
+     *     )
+     */
     public function showBySlug(string $slug)
     {
         try {

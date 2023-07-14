@@ -16,6 +16,26 @@ class LinkAnalyticsController extends Controller
         parent::__construct();
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/link-analytics/total-visit-count",
+     *     summary="Get total visit count",
+     *     tags={"Link Analytics"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Total visit count",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="total_visit_count",
+     *                 type="integer",
+     *                 example=10
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function getTotalVisitCount(Request $request)
     {
         try {
@@ -62,6 +82,68 @@ class LinkAnalyticsController extends Controller
         }
     }
 
+    /**
+     * @OA\Get(
+     *     path="/api/v1/link-analytics/total-visit-by-country",
+     *     summary="Get total visit by country",
+     *     tags={"Link Analytics"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Parameter(
+     *         name="per_page",
+     *         in="query",
+     *         description="Number of items per page",
+     *         required=false,
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=10
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Total visit by country",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(
+     *                 property="items",
+     *                 type="array",
+     *                 @OA\Items(
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="country",
+     *                         type="string",
+     *                         example="United States"
+     *                     ),
+     *                     @OA\Property(
+     *                         property="count",
+     *                         type="integer",
+     *                         example=10
+     *                     )
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="total",
+     *                 type="integer",
+     *                 example=10
+     *             ),
+     *             @OA\Property(
+     *                 property="per_page",
+     *                 type="integer",
+     *                 example=10
+     *             ),
+     *             @OA\Property(
+     *                 property="current_page",
+     *                 type="integer",
+     *                 example=1
+     *             ),
+     *             @OA\Property(
+     *                 property="last_page",
+     *                 type="integer",
+     *                 example=1
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function getMostVisitedLinks(Request $request)
     {
         try {

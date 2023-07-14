@@ -83,6 +83,20 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $item = User::find($id);
+
+        if (!$item) {
+            return redirect()->route('admin.users.index')->with([
+                'status' => 'danger',
+                'message' => 'User not found',
+            ]);
+        }
+
+        $item->delete();
+
+        return redirect()->route('admin.users.index')->with([
+            'status' => 'success',
+            'message' => 'User deleted successfully',
+        ]);
     }
 }
