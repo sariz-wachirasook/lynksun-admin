@@ -109,7 +109,7 @@
                         <td class="px-6 py-4 ">
 
                             <div class="flex gap-2">
-                                <a
+                                {{-- <a
                                     href="{{ route($route . '.show', ['slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
@@ -117,7 +117,7 @@
                                 <a
                                     href="{{ route($route . '.edit', ['slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
-                                </a>
+                                </a> --}}
 
                                 <form
                                     action="{{ route($route . '.destroy', ['slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}"
