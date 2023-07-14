@@ -74,9 +74,7 @@ class LinksController extends Controller
 
             if ($search) {
                 $items = $items
-                    ->orWhere('links.url', 'like', '%' . $search . '%')
-                    ->orWhere('links.name', 'like', '%' . $search . '%')
-                    ->orWhere('links.short_url', 'like', '%' . $search . '%');
+                    ->where('links.name', 'like', '%' . $search . '%');
             }
 
             if ($user) {
@@ -489,7 +487,11 @@ class LinksController extends Controller
                 'url' => 'required|url',
             ]);
 
-            $link = Links::findOrFail($id);
+            $link = Links::find($id);
+
+            if (!$link) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
 
             $link->update([
                 'url' => $request->url,
@@ -501,7 +503,20 @@ class LinksController extends Controller
                 ]);
             }
 
-            return response()->json($link, 200);
+            $item = Links::query()->select([
+                'links.id',
+                'links.name',
+                'links.url',
+                'links.short_url',
+                'links.created_at',
+                'links.updated_at',
+                'links.user_id',
+                DB::raw('COUNT(link_visit_logs.id) as visit_count'),
+            ])->leftJoin('link_visit_logs', 'link_visit_logs.link_id', '=', 'links.id')
+                ->groupBy('links.id')
+                ->find($id);
+
+            return response()->json($item, 200);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
         }
@@ -560,8 +575,11 @@ class LinksController extends Controller
     public function destroy(string $id)
     {
         try {
-            // TODO: only members can delete their own links
-            // 
+            $user = auth()->user();
+
+            if (!$user) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
 
             $link = Links::findOrFail($id);
 
@@ -569,6 +587,28 @@ class LinksController extends Controller
 
             return response()->json([
                 'message' => 'Link deleted successfully'
+            ], 200);
+        } catch (\Exception $e) {
+            return $this->exceptionResponse($e);
+        }
+    }
+
+    public function showBySlug(string $slug)
+    {
+        try {
+            $link = Links::where('short_url', $slug)->first();
+
+            if (!$link) {
+                return response()->json(['message' => 'Not Found'], 404);
+            }
+
+            LinkVisitLogs::create([
+                'link_id' => $link->id,
+                'ip' => request()->ip(),
+            ]);
+
+            return response()->json([
+                'url' => $link->url,
             ], 200);
         } catch (\Exception $e) {
             return $this->exceptionResponse($e);
