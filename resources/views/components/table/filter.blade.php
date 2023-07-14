@@ -1,4 +1,10 @@
-<form action="{{ route('posts.index', session('locale')) }}" method="GET" class="flex justify-between my-5">
+@props([
+    'search' => '',
+    'per_page' => '10',
+    'route' => '',
+])
+
+<form action="{{ route($route . '.index') }}" method="GET" class="flex justify-between my-5">
     <div class="flex gap-x-5">
         <x-input.text name="search" label="{{ __('app.search') }}" placeholder="{{ __('app.search') }}"
             value="{{ $search }}" />
@@ -24,7 +30,7 @@
             ];
         @endphp
 
-        <x-input.select name="perPage" label="{{ __('app.per_page') }}" :options="$options" :value="$perPage" />
+        <x-input.select name="per_page" label="{{ __('app.per_page') }}" :options="$options" :value="$per_page" />
         <x-button.group class="items-end">
             <x-button.submit />
         </x-button.group>

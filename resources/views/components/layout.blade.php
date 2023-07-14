@@ -45,29 +45,31 @@
 
 <body class="dark:bg-gray-900 antialiased">
     <x-layouts.header />
+    <div class="grid md:grid-cols-[auto,1fr]">
+        <x-layouts.aside />
 
-    <main class="min-h-[80vh]">
-        <div class="max-w-screen-xl mx-auto px-5 py-5">
-            {{-- validate --}}
-            @if ($errors && $errors->any())
-                @foreach ($errors->all() as $error)
-                    <x-alert type="danger">
-                        {{ $error }}
+        <main class="min-h-[75vh]">
+            <div class="max-w-screen-xl mx-auto px-5 py-5">
+                {{-- validate --}}
+                @if ($errors && $errors->any())
+                    @foreach ($errors->all() as $error)
+                        <x-alert type="danger">
+                            {{ $error }}
+                        </x-alert>
+                    @endforeach
+                @endif
+
+                {{-- alert --}}
+                @if (session()->has('success'))
+                    <x-alert type="success">
+                        {{ session()->get('success') }}
                     </x-alert>
-                @endforeach
-            @endif
+                @endif
 
-            {{-- alert --}}
-            @if (session()->has('success'))
-                <x-alert type="success">
-                    {{ session()->get('success') }}
-                </x-alert>
-            @endif
-
-            {{ $slot }}
-        </div>
-    </main>
-    <x-layouts.footer />
+                {{ $slot }}
+            </div>
+        </main>
+    </div>
 </body>
 
 </html>

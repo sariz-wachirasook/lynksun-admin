@@ -15,4 +15,12 @@ return [
     'meta_title' => 'Meta title',
     'meta_description' => 'Meta description',
     'meta_keywords' => 'Meta keywords',
+    'login' => 'Login',
+    'email' => 'Email',
+    'password' => 'Password',
+    'id' => 'ID',
+    'short_url' => 'Short URL',
+    'original_url' => 'Original URL',
+    'name' => 'Name',
+    'total_visits' => 'Total visits',
 ];

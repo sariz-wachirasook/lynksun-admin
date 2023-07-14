@@ -1,4 +1,4 @@
-import "flowbite/dist/flowbite.min.js";
+import "flowbite";
 
 import tinymce from "./components/tinymce";
 import mobileResize from "./utils/mobileResize";

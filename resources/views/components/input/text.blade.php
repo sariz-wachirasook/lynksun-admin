@@ -1,6 +1,6 @@
-@props(['name', 'value', 'label', 'placeholder', 'required' => false, 'hidden' => false])
+@props(['name', 'value', 'label', 'placeholder', 'required' => false, 'hidden' => false, 'class' => ''])
 
-<div class="@if ($hidden ?? false) hidden @endif">
+<div class="@if ($hidden ?? false) hidden @endif {{ $class }}">
     <x-label for="{{ $name }}" :label="$label" :required="$required" />
     <input id="{{ $name }}" type="text" name="{{ $name }}" value="{{ $value ?? '' }}"
         placeholder="{{ $placeholder ?? $label }}" maxlength="255" @if ($required ?? false) required @endif

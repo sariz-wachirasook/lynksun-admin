@@ -1,7 +1,7 @@
-@props(['columns', 'sort', 'order', 'route', 'items', 'search', 'perPage'])
+@props(['columns', 'sort', 'order', 'route', 'items', 'search', 'per_page'])
 
 {{-- filter --}}
-<x-table.filter :search="$search" :perPage="$perPage" />
+<x-table.filter :search="$search" :per_page="$per_page" :route="$route" />
 
 <hr class="my-5 border-gray-200 dark:border-gray-700">
 
@@ -13,17 +13,17 @@
                 @foreach ($columns as $column)
                     <th scope="col" class="px-6 py-3">
                         @if ($sort === $column['key'] && $order === 'asc')
-                            <a href="{{ route($route . '.index', session('locale'), ['sort' => $column['key'], 'order' => 'desc']) }}"
+                            <a href="{{ route($route . '.index', ['sort' => $column['key'], 'order' => 'desc']) }}"
                                 class="whitespace-nowrap">
                                 {{ $column['title'] }} <i class="fa-solid fa-sort-down"></i>
                             </a>
                         @elseif ($sort === $column['key'] && $order === 'desc')
-                            <a href="{{ route($route . '.index', session('locale'), ['sort' => null, 'order' => null]) }}"
+                            <a href="{{ route($route . '.index', ['sort' => null, 'order' => null]) }}"
                                 class="whitespace-nowrap">
                                 {{ $column['title'] }} <i class="fa-solid fa-sort-up"></i>
                             </a>
                         @else
-                            <a href="{{ route($route . '.index', session('locale'), ['sort' => $column['key'], 'order' => 'asc']) }}"
+                            <a href="{{ route($route . '.index', ['sort' => $column['key'], 'order' => 'asc']) }}"
                                 class="whitespace-nowrap">
                                 {{ $column['title'] }} <i class="fa-solid fa-sort"></i>
                             </a>
@@ -52,6 +52,24 @@
                                 @case('tinymce')
                                     <td class="px-6 py-4 min-w-[300px]">
                                         {!! $item->{$column['key']} !!}
+                                    </td>
+                                @break
+
+                                @case('short_url')
+                                    <td class="px-6 py-4 min-w-[250px]">
+                                        <a href="/api/v1/links/open/{{ $item->{$column['key']} }}" target="_blank"
+                                            class="text-blue-500 hover:text-blue-700">
+                                            {{ $item->{$column['key']} }}
+                                        </a>
+                                    </td>
+                                @break
+
+                                @case('url')
+                                    <td class="px-6 py-4 min-w-[250px]">
+                                        <a href="{{ $item->{$column['key']} }}" target="_blank"
+                                            class="text-blue-500 hover:text-blue-700">
+                                            {{ $item->{$column['key']} }}
+                                        </a>
                                     </td>
                                 @break
 
@@ -92,17 +110,17 @@
 
                             <div class="flex gap-2">
                                 <a
-                                    href="{{ route($route . '.show', ['locale' => session('locale'), 'slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}">
+                                    href="{{ route($route . '.show', ['slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}">
                                     <i class="fa-solid fa-eye"></i>
                                 </a>
 
                                 <a
-                                    href="{{ route($route . '.edit', ['locale' => session('locale'), 'slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}">
+                                    href="{{ route($route . '.edit', ['slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}">
                                     <i class="fa-solid fa-pen-to-square"></i>
                                 </a>
 
                                 <form
-                                    action="{{ route($route . '.destroy', ['locale' => session('locale'), 'slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}"
+                                    action="{{ route($route . '.destroy', ['slug' => $item->slug ?? null, 'id' => $item->id ?? null]) }}"
                                     id="form-delete-{{ $item->slug ?? $item->id }}" method="POST">
                                     @csrf
                                     @method('DELETE')

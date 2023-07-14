@@ -15,4 +15,7 @@ return [
     'meta_title' => 'Meta title',
     'meta_description' => 'Meta description',
     'meta_keywords' => 'Meta keywords',
+    'login' => 'เข้าสู่ระบบ',
+    'email' => 'อีเมล',
+    'password' => 'รหัสผ่าน',
 ];

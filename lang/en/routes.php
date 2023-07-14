@@ -10,4 +10,8 @@ return [
     'api' => 'API',
     'login' => 'Login',
     'posts' => 'Posts',
+    'links' => 'Links',
+    'dashboard' => 'Dashboard',
+    'logout' => 'Logout',
+    'users' => 'Users',
 ];
